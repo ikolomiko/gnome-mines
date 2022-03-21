@@ -6,8 +6,8 @@ public class Tile : Gtk.Button
     private Gtk.GestureLongPress _gesture;
 
     public signal void tile_mouse_over (int x, int y);
-    public signal void tile_pressed (int x, int y, Gdk.EventButton event);
-    public signal void tile_released (int x, int y, Gdk.EventButton event);
+    public signal void tile_pressed (int x, int y, Gdk.ButtonEvent event);
+    public signal void tile_released (int x, int y, Gdk.ButtonEvent event);
     public signal void tile_long_pressed (int x, int y);
 
     public Tile (int prow, int pcol)

@@ -213,7 +213,7 @@ public class MinefieldView : Gtk.Grid
         }
     }
 
-    public void tile_pressed_cb (int x, int y, Gdk.EventButton event)
+    public void tile_pressed_cb (int x, int y, Gdk.ButtonEvent event)
     {
         /* Ignore double click events */
         if (event.type != Gdk.EventType.BUTTON_PRESS)
@@ -251,7 +251,7 @@ public class MinefieldView : Gtk.Grid
         keyboard_cursor.position = {selected.x, selected.y};
     }
 
-    public void tile_released_cb (int x, int y, Gdk.EventButton event)
+    public void tile_released_cb (int x, int y, Gdk.ButtonEvent event)
     {
         if (event.button != 1) return;
 

@@ -411,25 +411,24 @@ public class Mines : Gtk.Application
         return _(key).replace ("_", "");
     }
 
-    private const Gdk.WindowState tiled_state = Gdk.WindowState.TILED
-                                              | Gdk.WindowState.TOP_TILED
-                                              | Gdk.WindowState.BOTTOM_TILED
-                                              | Gdk.WindowState.LEFT_TILED
-                                              | Gdk.WindowState.RIGHT_TILED;
-    private bool window_state_event_cb (Gdk.EventWindowState event)
+    private const Gdk.ToplevelState tiled_state = Gdk.ToplevelState.TILED
+                                                | Gdk.ToplevelState.TOP_TILED
+                                                | Gdk.ToplevelState.BOTTOM_TILED
+                                                | Gdk.ToplevelState.LEFT_TILED
+                                                | Gdk.ToplevelState.RIGHT_TILED;
+
+    private inline void on_window_state_event ()
     {
-        if ((event.changed_mask & Gdk.WindowState.MAXIMIZED) != 0)
-            window_is_maximized = (event.new_window_state & Gdk.WindowState.MAXIMIZED) != 0;
+        Gdk.ToplevelState state = surface.get_state ();
+
+        window_is_maximized     = (state & Gdk.ToplevelState.MAXIMIZED)  != 0;
         /* fullscreen: saved as maximized */
-        if ((event.changed_mask & Gdk.WindowState.FULLSCREEN) != 0)
-            window_is_fullscreen = (event.new_window_state & Gdk.WindowState.FULLSCREEN) != 0;
+        window_is_fullscreen    = (state & Gdk.ToplevelState.FULLSCREEN) != 0;
         /* We don’t save this state, but track it for saving size allocation */
-        if ((event.changed_mask & tiled_state) != 0)
-            window_is_tiled = (event.new_window_state & tiled_state) != 0;
-        return false;
+        window_is_tiled         = (state & tiled_state)                  != 0;
     }
 
-    private bool window_focus_out_event_cb (Gdk.EventFocus event)
+    private bool window_focus_out_event_cb (Gdk.FocusEvent event)
     {
         if (minefield != null && minefield.is_clock_started ())
             minefield.paused = true;
@@ -437,7 +436,7 @@ public class Mines : Gtk.Application
         return false;
     }
 
-    private bool window_focus_in_event_cb (Gdk.EventFocus event)
+    private bool window_focus_in_event_cb (Gdk.FocusEvent event)
     {
         if (minefield != null && !pause_requested &&
             (theme_dialog == null || theme_dialog.visible == false))
@@ -497,7 +496,7 @@ public class Mines : Gtk.Application
         window.present ();
     }
 
-    private bool view_button_press_event (Widget widget, Gdk.EventButton event)
+    private bool view_button_press_event (Widget widget, Gdk.ButtonEvent event)
     {
         /* Cancel pause on click */
         if (minefield.paused)
